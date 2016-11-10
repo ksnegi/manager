@@ -2,13 +2,14 @@ package com.negi.manager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
 @SpringBootApplication
-public class ManagerBoot {
+@EnableEurekaServer
+public class EurekaServer {
 
     public static void main(String[] args) {
-        SpringApplication.run(ManagerBoot.class);
+        SpringApplication.run(EurekaServer.class, args);
     }
 
 }

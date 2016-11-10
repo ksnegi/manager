@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    default: development
+    active: development
+  application:
+    name: user
+  cloud:
+    config:
+    discovery:
+      # note this needs to be turned on if you wnat the discovery first bootstrap
+      enabled: true
+      serviceId: user
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    # enable these two settings if you want discovery to work
+    registerWithEureka: true
+    fetchRegistry: true
+    instance:
+      preferIpAddress: true

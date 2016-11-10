@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: config-service
+  profiles:
+    default: native
+    active: native

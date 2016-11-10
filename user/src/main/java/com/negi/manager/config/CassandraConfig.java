@@ -18,8 +18,9 @@ import org.springframework.data.cassandra.mapping.CassandraMappingContext;
 public class CassandraConfig {
 
     private static final String KEYSPACE = "cassandra.keyspace";
-    private static final String CONTACTPOINTS = "cassandra.contactpoints";
-    private static final String PORT = "cassandra.port";
+    private static final String CONTACT_POINTS = "cassandra.contactPoints";
+    private static final String PORT = "cassandra.cqlPort";
+    private static final String CLUSTER_NAME = "cassandra.clusterName";
 
     @Autowired
     private Environment environment;
@@ -32,13 +33,15 @@ public class CassandraConfig {
     }
 
     private String getContactPoints() {
-        return environment
-                .getProperty(CONTACTPOINTS);
+        return environment.getProperty(CONTACT_POINTS);
     }
 
     private int getPortNumber() {
-        return Integer.parseInt(environment
-                .getProperty(PORT));
+        return Integer.parseInt(environment.getProperty(PORT));
+    }
+
+    private String getClusterName() {
+        return environment.getProperty(CLUSTER_NAME);
     }
 
     @Bean

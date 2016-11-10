@@ -1,0 +1,32 @@
+config-server:
+  build: ./config-server
+  dockerfile: Dockerfile
+  ports:
+    - "8888"
+
+eureka:
+  build: ./eureka
+  dockerfile: Dockerfile
+  ports:
+    - "8761"
+
+cassandra:
+  image: cassandra:2
+  links:
+   - eureka
+  ports:
+   - "9042"
+
+cassandra-sidecar:
+  build: cassandra-sidecar
+  links:
+    - eureka
+  ports:
+    - "9090"
+
+user:
+  build: user
+  links:
+    - eureka
+  ports:
+    - "8080"
