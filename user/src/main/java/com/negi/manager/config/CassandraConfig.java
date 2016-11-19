@@ -1,6 +1,9 @@
 package com.negi.manager.config;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -13,42 +16,28 @@ import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.data.cassandra.core.CassandraTemplate;
 import org.springframework.data.cassandra.mapping.BasicCassandraMappingContext;
 import org.springframework.data.cassandra.mapping.CassandraMappingContext;
+import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toList;
 
 @Configuration
+@EnableCassandraRepositories(basePackages = {"com.negi.manager.dao" })
 public class CassandraConfig {
 
-    private static final String KEYSPACE = "cassandra.keyspace";
-    private static final String CONTACT_POINTS = "cassandra.contactPoints";
-    private static final String PORT = "cassandra.cqlPort";
-    private static final String CLUSTER_NAME = "cassandra.clusterName";
+    @Autowired
+    private Environment env;
 
     @Autowired
-    private Environment environment;
-
-    public CassandraConfig() {
-    }
-
-    private String getKeyspaceName() {
-        return environment.getProperty(KEYSPACE);
-    }
-
-    private String getContactPoints() {
-        return environment.getProperty(CONTACT_POINTS);
-    }
-
-    private int getPortNumber() {
-        return Integer.parseInt(environment.getProperty(PORT));
-    }
-
-    private String getClusterName() {
-        return environment.getProperty(CLUSTER_NAME);
-    }
+    private DiscoveryClient discoveryClient;
 
     @Bean
     public CassandraClusterFactoryBean cluster() {
         CassandraClusterFactoryBean cluster = new CassandraClusterFactoryBean();
-        cluster.setContactPoints(getContactPoints());
-        cluster.setPort(getPortNumber());
+        cluster.setContactPoints(StringUtils.join(getContactPoints(), ","));
+        cluster.setPort(Integer.parseInt(env.getProperty("cassandra.port")));
         return cluster;
     }
 
@@ -61,20 +50,39 @@ public class CassandraConfig {
     public CassandraConverter converter() {
         return new MappingCassandraConverter(mappingContext());
     }
-
+    
     @Bean
     public CassandraSessionFactoryBean session() throws Exception {
-        CassandraSessionFactoryBean cassandraSessionFactoryBean = new CassandraSessionFactoryBean();
-        cassandraSessionFactoryBean.setCluster(cluster().getObject());
-        cassandraSessionFactoryBean.setKeyspaceName(getKeyspaceName());
-        cassandraSessionFactoryBean.setConverter(converter());
-        cassandraSessionFactoryBean.setSchemaAction(SchemaAction.NONE);
-        return cassandraSessionFactoryBean;
+        CassandraSessionFactoryBean session = new CassandraSessionFactoryBean();
+        session.setCluster(cluster().getObject());
+        session.setKeyspaceName(env.getProperty("cassandra.keyspace"));
+        session.setConverter(converter());
+        session.setSchemaAction(SchemaAction.NONE);
+
+        return session;
     }
 
     @Bean
-    public CassandraOperations cassandraTemplate() throws Exception {
+    public
+    CassandraOperations cassandraTemplate()throws Exception {
         return new CassandraTemplate(session().getObject());
+    }
+
+    private List<String> getContactPoints() {
+        return toEurekaInstances(discoveryClient, env.getProperty("cassandra.clusterName"))
+                .stream().map(eurekaInstancesToHost())
+                .collect(toList());
+    }
+
+    private List<ServiceInstance> toEurekaInstances(DiscoveryClient discoveryClient, final String serviceId) {
+        return discoveryClient.getInstances(serviceId);
+    }
+
+    private final Function<ServiceInstance, String> eurekaInstancesToHost() {
+        return instanceInfo -> {
+            final String localAddress = instanceInfo.getHost();
+            return localAddress;
+        };
     }
 
 }

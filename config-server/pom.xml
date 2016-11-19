@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>manager-config</artifactId>
+    <artifactId>manager-config-server</artifactId>
     <packaging>jar</packaging>
     <name>Cloud Config Server</name>
     <description>Centralized Configuration Server for Manager modules</description>
@@ -19,10 +19,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-config-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
         </dependency>
     </dependencies>
 

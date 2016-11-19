@@ -1,12 +1,12 @@
 package com.negi.manager.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.negi.manager.model.User;
 import com.negi.manager.dao.UserDAO;
+import com.negi.manager.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -15,23 +15,28 @@ public class UserServiceImpl implements UserService {
     UserDAO userDAO;
 
     @Override
-    public User upsert(User user) {
-        return userDAO.upsert(user);
+    public User create(User user) {
+        return userDAO.create(user);
     }
 
     @Override
-    public void remove(String id) {
-        userDAO.remove(id);
+    public User update(User user) {
+        return userDAO.update(user);
     }
 
     @Override
-    public User getById(String id) {
-        return userDAO.getById(id);
+    public void delete(String id) {
+        userDAO.delete(UUID.fromString(id));
     }
 
     @Override
-    public List<User> getAll() {
-        return userDAO.getAll();
+    public User findById(String id) {
+        return userDAO.findById(UUID.fromString(id));
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userDAO.findAll();
     }
 
 }

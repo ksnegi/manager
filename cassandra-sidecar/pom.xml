@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>manager-cassandra</artifactId>
+    <artifactId>manager-cassandra-sidecar</artifactId>
     <packaging>jar</packaging>
     <name>Cassandra Sidecar Microservice</name>
     <description>Sidecar application for registering Cassandra nodes with Eureka</description>
@@ -22,11 +22,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-cassandra</artifactId>
         </dependency>
     </dependencies>
 

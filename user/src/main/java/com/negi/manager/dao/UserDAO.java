@@ -1,17 +1,20 @@
 package com.negi.manager.dao;
 
-import java.util.List;
-
 import com.negi.manager.model.User;
+
+import java.util.List;
+import java.util.UUID;
 
 public interface UserDAO {
 
-    User upsert(User user);
+    User create(User user);
 
-    void remove(String id);
+    User update(User user);
 
-    User getById(String id);
+    void delete(UUID id);
 
-    List<User> getAll();
+    User findById(UUID id);
+
+    List<User> findAll();
 
 }

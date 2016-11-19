@@ -7,6 +7,7 @@
     <artifactId>manager</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>Microservice Solution</name>
 
     <modules>
         <module>config-server</module>
@@ -15,24 +16,26 @@
         <module>user</module>
     </modules>
 
+    <properties>
+        <docker.image.prefix>ksnegi</docker.image.prefix>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.1.RELEASE</version>
+        <version>1.4.0.RELEASE</version>
         <relativePath/>
     </parent>
-
-    <properties>
-        <docker.image.prefix>ksnegi</docker.image.prefix>
-        <java.version>1.8</java.version>
-    </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Camden.SR1</version>
+                <version>Camden.SR2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

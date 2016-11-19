@@ -1,17 +1,19 @@
 package com.negi.manager.service;
 
-import java.util.List;
-
 import com.negi.manager.model.User;
+
+import java.util.List;
 
 public interface UserService {
 
-    User upsert(User user);
+    User create(User user);
 
-    void remove(String id);
+    User update(User user);
 
-    User getById(String id);
+    void delete(String id);
 
-    List<User> getAll();
+    User findById(String id);
+
+    List<User> findAll();
 
 }

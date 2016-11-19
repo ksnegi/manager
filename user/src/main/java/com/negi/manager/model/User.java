@@ -4,11 +4,13 @@ import org.springframework.data.cassandra.mapping.Column;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
+import java.util.UUID;
+
 @Table("user")
 public class User {
 
     @PrimaryKey("id")
-    private String id;
+    private UUID id;
     @Column("email")
     private String email;
     @Column("fullName")
@@ -22,7 +24,7 @@ public class User {
         super();
     }
 
-    public User(String id, String email, String fullName, String managerId, String department) {
+    public User(UUID id, String email, String fullName, String managerId, String department) {
         super();
         this.id = id;
         this.email = email;
@@ -31,11 +33,11 @@ public class User {
         this.department = department;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -74,11 +76,12 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", email='" + email + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", managerId='" + managerId + '\'' +
                 ", department='" + department + '\'' +
                 '}';
     }
+
 }

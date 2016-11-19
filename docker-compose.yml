@@ -1,14 +1,12 @@
 config-server:
   build: ./config-server
-  dockerfile: Dockerfile
   ports:
-    - "8888"
+    - "8888:8888"
 
 eureka:
   build: ./eureka
-  dockerfile: Dockerfile
   ports:
-    - "8761"
+    - "8761:8761"
 
 cassandra:
   image: cassandra:2
@@ -18,15 +16,21 @@ cassandra:
    - "9042"
 
 cassandra-sidecar:
-  build: cassandra-sidecar
+  build: ./cassandra-sidecar
+  environment:
+    - SPRING_PROFILES_ACTIVE=docker
   links:
     - eureka
+    - cassandra
   ports:
     - "9090"
 
 user:
-  build: user
+  build: ./user
+  environment:
+    - SPRING_PROFILES_ACTIVE=docker
   links:
     - eureka
+    - cassandra-sidecar
   ports:
-    - "8080"
+    - "8080:8080"
